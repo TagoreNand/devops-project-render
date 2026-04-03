@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: devops-advanced-backend
+    env: node
+    plan: free
+    region: frankfurt
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm install --omit=dev && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
+    healthCheckPath: /health
+
+databases:
+  - name: devops-advanced-postgres
+    plan: free
+
