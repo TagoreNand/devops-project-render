@@ -8,16 +8,29 @@ export function createApp(taskStore?: TaskStore) {
 
   const store = taskStore ?? new PgTaskStore(pgPoolFromEnv());
 
-  app.get("/health", (_req, res) => {
+  app.get("/", (_req: express.Request, res: express.Response) => {
+    res.status(200).json({
+      service: "devops-advanced-backend",
+      message: "API is running. Try GET /health or GET /api/tasks.",
+      endpoints: {
+        health: "GET /health",
+        listTasks: "GET /api/tasks",
+        createTask: "POST /api/tasks (JSON body: { \"title\": \"...\" })",
+        deleteTask: "DELETE /api/tasks/:id"
+      }
+    });
+  });
+
+  app.get("/health", (_req: express.Request, res: express.Response) => {
     res.status(200).json({ status: "ok" });
   });
 
-  app.get("/api/tasks", async (_req, res) => {
+  app.get("/api/tasks", async (_req: express.Request, res: express.Response) => {
     const tasks = await store.list();
     res.status(200).json(tasks);
   });
 
-  app.post("/api/tasks", async (req, res) => {
+  app.post("/api/tasks", async (req: express.Request, res: express.Response) => {
     const title = req.body?.title;
     if (typeof title !== "string" || title.trim().length === 0) {
       res.status(400).json({ error: "`title` must be a non-empty string" });
@@ -31,7 +44,7 @@ export function createApp(taskStore?: TaskStore) {
     res.status(201).json(task);
   });
 
-  app.delete("/api/tasks/:id", async (req, res) => {
+  app.delete("/api/tasks/:id", async (req: express.Request, res: express.Response) => {
     const id = Number(req.params.id);
     if (!Number.isFinite(id)) {
       res.status(400).json({ error: "`id` must be a number" });

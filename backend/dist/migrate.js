@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.migrate = migrate;
-const promises_1 = __importDefault(require("node:fs/promises"));
-const node_path_1 = __importDefault(require("node:path"));
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
 const taskStorePg_1 = require("./taskStorePg");
 async function migrate() {
     const pool = (0, taskStorePg_1.pgPoolFromEnv)();
     try {
-        const migrationPath = node_path_1.default.join(__dirname, "..", "migrations", "001_init.sql");
+        const migrationPath = path_1.default.join(__dirname, "..", "migrations", "001_init.sql");
         const sql = await promises_1.default.readFile(migrationPath, "utf8");
         await pool.query(sql);
     }

@@ -4,7 +4,8 @@ services:
     env: node
     plan: free
     region: frankfurt
-    buildCommand: cd backend && npm install && npm run build
+    # NODE_ENV=production omits devDependencies; TypeScript + @types/* are required to build.
+    buildCommand: cd backend && npm install --include=dev && npm run build
     startCommand: cd backend && npm install --omit=dev && npm start
     envVars:
       - key: NODE_ENV

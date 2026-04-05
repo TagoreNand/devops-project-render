@@ -26,7 +26,8 @@ You can either use the Render UI or `render.yaml`. The simplest path:
 2. In Render, **New + → Blueprint** and point it at your GitHub repo (or create a Web Service + Postgres manually).
 3. Ensure:
    - Web service root is the repo root.
-   - Build command: `cd backend && npm install && npm run build`
+   - Build command: `cd backend && npm install --include=dev && npm run build`  
+     (If `NODE_ENV=production` is set during build, plain `npm install` skips devDependencies and TypeScript will fail.)
    - Start command: `cd backend && npm install --omit=dev && npm start`
 4. Create a **Postgres** instance in the same Render project.
 5. In the web service settings, set the environment variable:
